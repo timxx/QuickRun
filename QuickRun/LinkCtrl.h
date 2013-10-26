@@ -1,0 +1,38 @@
+//========================================================================================================
+#ifndef URLCTRL_INCLUDED
+#define URLCTRL_INCLUDED
+//========================================================================================================
+#pragma once
+//========================================================================================================
+#include "Window.h"
+//========================================================================================================
+class LinkCtrl : public Window
+{
+public:
+    LinkCtrl():_hfUnderlined(0),_hCursor(0), _msgDest(NULL), _cmdID(0), _oldproc(NULL), \
+		_linkColor(), _visitedColor(), _clicking(false), _URL(_T("")){};
+
+    void create(HWND itemHandle, TCHAR * link, COLORREF linkColor = RGB(0,0,255));
+	void create(HWND itemHandle, int cmd, HWND msgDest = NULL);
+    void destroy();
+
+protected :
+    TString _URL;
+    HFONT	_hfUnderlined;
+    HCURSOR	_hCursor;
+
+	HWND _msgDest;
+	unsigned long _cmdID;
+
+    WNDPROC  _oldproc;
+    COLORREF _linkColor;			
+    COLORREF _visitedColor;
+    bool  _clicking;
+
+    static LRESULT CALLBACK LinkCtrlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+        return ((LinkCtrl *)(::GetWindowLongPtr(hWnd, GWL_USERDATA)))->runProc(hWnd, uMsg, wParam, lParam);
+    };
+    LRESULT runProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+};
+
+#endif //URLCTRL_INCLUDED
